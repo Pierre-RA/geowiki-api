@@ -1,0 +1,31 @@
+{
+  "name": "geowiki-api",
+  "version": "0.0.1",
+  "description": "geoWiki API ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pierre-RA/geowiki-api.git"
+  },
+  "keywords": [
+    "Locations",
+    "Travel"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pierre-RA/geowiki-api/issues"
+  },
+  "homepage": "https://github.com/Pierre-RA/geowiki-api#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.2.0",
+    "typescript": "^2.4.1"
+  },
+  "dependencies": {
+    "typescript-rest": "^1.0.4"
+  }
+}
