@@ -1,11 +1,24 @@
 {
-    "files": [
-        "src/*"
-    ],
-    "compilerOptions": {
-        "noImplicitAny": true,
-        "target": "es5",
-        "experimentalDecorators" : true,
-        "emitDecoratorMetadata" : true
-    }
+  "files": [
+    "server/**/*.ts"
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "target": "es6",
+    "outDir": "dist",
+    "rootDir": "server",
+    "sourceMap": true,
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "typeRoots": [ "node_modules/@types" ],
+    "paths": {
+      "*": [
+        "node_modules/@types/*",
+        "server/types/*"
+      ]
+    },
+    "experimentalDecorators": true
+  }
 }
