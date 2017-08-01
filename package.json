@@ -1,7 +1,7 @@
 {
-  "name": "api-skelpi",
+  "name": "geowiki-api",
   "version": "0.0.1",
-  "description": "skeleton API in Typescript",
+  "description": "geowiki API in Typescript",
   "main": "/dist/server.js",
   "scripts": {
     "test": "jest --forceExit",
