@@ -1,4 +1,4 @@
-# API skeleton
+# Geowiki API
 
 Typescript + Express + Jest + Chai
 
@@ -25,6 +25,12 @@ $ npm start
 ## Description
 
 ...
+
+## Authors
+
+* Kasun Samarasinghe
+* Akila Nonis
+* Pierre Repetto-Andipatin
 
 ## License
 
