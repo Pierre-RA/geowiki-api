@@ -1,45 +1,36 @@
-import {Path, GET, POST, PathParam} from  "typescript-rest";
-import * as bodyParser from 'body-parser';
-import {UserController} from "../controllers/user.controller";
+import * as express from "express";
+import {UserController} from "./../controllers/user.controller"
+const userRoutes = express.Router();
 
-@Path("/users")
-export class UserService {
+/**
+* Returns all the users
+*/
+userRoutes.get('/', (req, res, next) => {
+  let userController = new UserController();
+  res.json("{message: 'user list',version: 'geowiki_v.0.0.1'}");
+});
 
-  // Returns all the users
-  @GET
-  getUsers(): string {
-    return "GEOWiki API v1 ";
-  }
+/**
+* Returns a user with a given id
 
-  // Inserts a user with the given playload
-  @POST
-  addUsers(userPayload : any): string {
-    console.log(userPayload.name);
-    let uc = new UserController();
-    uc.addUser(userPayload);
+router.get('/:id', (req, res, next) => {
+  //let userController = new UserController();
+  //res.json = userController.getUsers(req);
+});
 
-    return "GEOWiki API v1 ";
-  }
 
-  @Path("/:id")
-  @GET
-  getUserById(@PathParam("id") id : string): string {
-    console.log("id " +id);
-    return "User with  "+ id  ;
-  }
+/**
+* Adds a user with the given payload
 
-  // Returns users by type
-  @Path("/:type")
-  @GET
-  getUserByType(): string {
-    return "GEOWiki API v1 ";
-  }
-
-  //Returns a list of users who is based close to the given coordinate
-  @Path("/:coordinate")
-  @GET
-  getUserByLocation(): string {
-    return "GEOWiki API v1 ";
-  }
+router.post('/', (req, res, next) => {
 
 }
+
+/**
+* Edits a given user with the given payload
+
+router.put('/', (req, res, next) => {
+
+}**/
+
+module.exports = userRoutes;

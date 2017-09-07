@@ -9,7 +9,7 @@ export class UserController {
   /**
   * Adds a user
   */
-  addUser(userPayload : string) {
+  public addUser(userPayload : string) {
     console.log("Adding user "+ userPayload.toString());
     var user = new User(userPayload);
     user.save();
@@ -18,7 +18,11 @@ export class UserController {
   /**
   * Returns the user given the ID
   */
-  getUser(id : number): string {
-    return null;
+  public getUser(): string {
+    return '{message : "users"}';
+  }
+
+  public getUsers(): string {
+    return '{message: "Hello world"}}';
   }
 }

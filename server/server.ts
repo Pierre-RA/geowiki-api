@@ -1,23 +1,21 @@
-import * as express from "express";
+import * as http from 'http';
+import * as express from 'express';
 import mongoose = require("mongoose");
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
-import {Server, Path, GET} from "typescript-rest";
-
-import * as homeController from "./controllers/home.controller";
-
-import {UserService} from "./routes/users"
-import {GeoWikiService} from "./routes/geo-wiki";
 
 dotenv.config();
 
-let app: express.Application = express();
-Server.buildServices(app, GeoWikiService);
-Server.buildServices(app, UserService);
+const port = process.env.PORT || 3000;
 
-app.set("port", process.env.PORT || 3000);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const app :express.Application = express();
+const users = require('./routes/users');
+middleware();
+routes();
+
+const server = http.createServer(app);
+server.listen(port);
+server.on('listening', onListening);
 
 try {
   mongoose.connect(process.env.MONGODB_URI);
@@ -26,10 +24,20 @@ try {
   console.log('Sever initialization failed ' , err.message);
 }
 
-app.listen(app.get("port"), () => {
-  console.log(("  App is running at http://localhost:%d in %s mode"),
-    app.get("port"), app.get("env"));
-  console.log("  Press CTRL-C to stop\n");
-});
+function middleware(): void {
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+}
 
-module.exports = app;
+// Configure API endpoints.
+function routes(): void {
+ let router = express.Router();
+ // placeholder route handler
+ app.use('/users', users);
+}
+
+
+function onListening(): void {
+  let addr = server.address();
+  let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
+}
