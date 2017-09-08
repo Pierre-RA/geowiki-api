@@ -1,25 +1,43 @@
-import * as express from "express";
+import * as http from 'http';
+import * as express from 'express';
+import mongoose = require("mongoose");
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
-import {Server, Path, GET} from "typescript-rest";
-
-import * as homeController from "./controllers/home.controller";
-import * as geoWikiService from "./routes/geo-wiki"
-import {GeoWikiService} from "./routes/geo-wiki";
 
 dotenv.config();
 
-let app: express.Application = express();
-Server.buildServices(app, GeoWikiService);
+const port = process.env.PORT || 3000;
 
-app.set("port", process.env.PORT || 3000);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const app :express.Application = express();
+const users = require('./routes/users');
+middleware();
+routes();
 
-app.listen(app.get("port"), () => {
-  console.log(("  App is running at http://localhost:%d in %s mode"),
-    app.get("port"), app.get("env"));
-  console.log("  Press CTRL-C to stop\n");
-});
+const server = http.createServer(app);
+server.listen(port);
+server.on('listening', onListening);
 
-module.exports = app;
+try {
+  mongoose.connect(process.env.MONGODB_URI);
+  console.log('Attempt to connect to databse');
+} catch (err) {
+  console.log('Sever initialization failed ' , err.message);
+}
+
+function middleware(): void {
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+}
+
+// Configure API endpoints.
+function routes(): void {
+ let router = express.Router();
+ // placeholder route handler
+ app.use('/users', users);
+}
+
+
+function onListening(): void {
+  let addr = server.address();
+  let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
+}

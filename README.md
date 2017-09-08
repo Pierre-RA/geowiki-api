@@ -24,6 +24,7 @@ $ npm start
 
 ## Description
 
+Description not yet prepared.
 ...
 
 ## Authors

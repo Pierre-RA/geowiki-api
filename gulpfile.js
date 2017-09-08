@@ -9,7 +9,7 @@ gulp.task('clean', function () {
     .pipe(clean());
 });
 
-gulp.task('build', function () {
+gulp.task('build', ['clean'], function () {
   var tsResult = tsProject.src()
     .pipe(tsProject());
 
@@ -17,7 +17,7 @@ gulp.task('build', function () {
     .pipe(gulp.dest(tsProject.options.outDir));
 });
 
-gulp.task('serve', function () {
+gulp.task('serve', ['build'], function () {
   return pm2.connect(true, function () {
     pm2.start({
       name: 'server',
