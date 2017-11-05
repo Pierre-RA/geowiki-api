@@ -1,36 +1,82 @@
 import * as express from "express";
 import {UserController} from "./../controllers/user.controller"
-const userRoutes = express.Router();
+const userRouter = express.Router();
 
 /**
-* Returns all the users
+* Adds a user
+* POST /users
 */
-userRoutes.get('/', (req, res, next) => {
+userRouter.post('/', (req, res, next) => {
   let userController = new UserController();
-  res.json("{message: 'user list',version: 'geowiki_v.0.0.1'}");
+  var userPayload = req.body;
+  var userPromise = userController.addUser(userPayload);
+  userPromise.then((response) =>{
+    if(response) {
+        var userID = response._id;
+        res.json("{\"message\": \"user added\", \"userID\" : \""+userID+"\"}"
+        );
+    } else {
+        res.json("{'message': 'Error adding user'}");
+    }
+  });
+});
+
+userRouter.get('/', (req, res, next) => {
+  res.json("{message: 'HELLO'}");
 });
 
 /**
 * Returns a user with a given id
-
-router.get('/:id', (req, res, next) => {
-  //let userController = new UserController();
-  //res.json = userController.getUsers(req);
+* GET /users/:id
+*/
+userRouter.get('/:id', (req, res, next) => {
+  let userController = new UserController();
+  var userID = req.params.id;
+  var userPromise = userController.getUser(userID);
+  userPromise.then((response) =>{
+    if(response) {
+      res.json(JSON.stringify(response));
+    } else {
+      res.json("{\"message\":\"User Not Found\"}");
+    }
+  });
 });
 
+/**
+* Edits a given user with a given id
+*/
+userRouter.put('/:id', (req, res, next) => {
+  let userController = new UserController();
+  var userID = req.params.id;
+  var userPayload = req.body;
+  var userPromise = userController.editUser(userID, userPayload);
+  userPromise.then((response) =>{
+    if(response) {
+      res.json(JSON.stringify(response));
+    } else {
+      res.json(JSON.stringify("{message : 'User update error''}"));
+    }
+  }).catch((response) => {
+    res.json(JSON.stringify("{'message' : 'User update error'}"))
+  });
+});
 
 /**
-* Adds a user with the given payload
+* Deletes a given user with a given id
+*/
+userRouter.delete('/:id', (req, res, next) => {
+  let userController = new UserController();
+  var userID = req.params.id;
+  var userPromise = userController.deleteUser(userID);
+  userPromise.then((response) =>{
+    if(response) {
+      res.json(JSON.stringify(response));
+    } else {
+      res.json("{message:'User deletion error'}");
+    }
+  }).catch((response) =>{
+    res.json("{'message':'User deletion error'}");
+  });
+});
 
-router.post('/', (req, res, next) => {
-
-}
-
-/**
-* Edits a given user with the given payload
-
-router.put('/', (req, res, next) => {
-
-}**/
-
-module.exports = userRoutes;
+module.exports = userRouter;

@@ -18,7 +18,7 @@ server.listen(port);
 server.on('listening', onListening);
 
 try {
-  mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect(process.env.MONGODB_URI, {useMongoClient : true});
   console.log('Attempt to connect to databse');
 } catch (err) {
   console.log('Sever initialization failed ' , err.message);
@@ -41,3 +41,6 @@ function onListening(): void {
   let addr = server.address();
   let bind = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
 }
+
+
+module.exports = server;

@@ -5,8 +5,8 @@ import ILocation = require("./ILocation")
 var userSchema = new mongoose.Schema({
   name : String,
   dateOfBirth : Date,
-  locale : String
-});
+  locale : String,
+}, { versionKey: false });
 
 interface IUserModel extends IUser, mongoose.Document { }
 var User = mongoose.model<IUserModel>("geowikiusers", userSchema);
