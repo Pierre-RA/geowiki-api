@@ -103,7 +103,7 @@ describe('API tests - users', () => {
       .expect(200)
       .then(res =>{
         expect(res.body).to.equal(
-          JSON.stringify("{'message':'User not found'}")
+          {message:'User not found'}
         );
       });
     done();
