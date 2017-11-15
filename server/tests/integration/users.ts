@@ -1,3 +1,4 @@
+import mongoose = require("mongoose");
 import * as request from "supertest";
 import {} from "jest";
 import { expect, should } from "chai";
@@ -6,7 +7,8 @@ import server = require("../../server");
 const chai = require('chai');
 
 describe('API tests - users', () => {
-  /*before(done => {
+
+  beforeEach(done => {
     if (mongoose.connection.db) {
       return mongoose.connection.db.dropDatabase(done);
     }
@@ -14,7 +16,8 @@ describe('API tests - users', () => {
       .then(() => {
         mongoose.connection.db.dropDatabase(done);
       });
-  });*/
+  });
+
   it('should add/get/update/delete a user', done => {
     let user = {
       name: 'Pierre',
@@ -29,18 +32,28 @@ describe('API tests - users', () => {
       .expect(200)
       .then((res:any) => {
         let response = JSON.parse(res.body);
-        uri = '/users/'.concat(response.userID);
+        let userID = response.userID;
+        uri = '/users/'.concat(userID);
         return request(server)
           .get(uri)
           .expect('Content-Type', /json/)
-          .expect(200);
-      })
+          .expect(200)
+          .then((res) => {
+            let response = JSON.parse(res.body);
+            expect(response).to.have.property("_id");
+          })
+        })
       .then(res => {
         return request(server)
           .put(uri)
           .send(user)
           .expect('Content-Type', /json/)
-      })
+          .then(res => {
+            let response = JSON.parse(res.body);
+            expect(response).to.have.property("message")
+              .equal("User details unchanged");
+          })
+        })
       .then(res => {
         user = {
           name: 'Pierre Jean Marcelino Repetto-Andipatin',
@@ -51,23 +64,37 @@ describe('API tests - users', () => {
           .put(uri)
           .send(user)
           .expect('Content-Type', /json/)
-          .expect(200);
+          .expect(200)
+          .then(res => {
+            let response = JSON.parse(res.body);
+            expect(response).to.have.property("message")
+              .equal("User details changed");
+          })
       })
       .then(res => {
         return request(server)
           .delete(uri)
           .expect('Content-Type', /json/)
-          .expect(200);
+          .expect(200)
+          .then(res => {
+            let response = JSON.parse(res.body);
+            expect(response).to.have.property("message");
+          })
       })
-      done();
+      .then(() => done(), error => done(error));
   });
 
   it('should fail to get an inexisting user', done => {
     request(server)
       .get('/users/1234')
       .expect('Content-Type', /json/)
-      .expect(404);
-    done();
+      .expect(200)
+      .then((res) => {
+        let response = JSON.parse(res.body);
+        expect(response).to.have.property("message")
+          .equal("User Not Found");
+      })
+      .then(() => done(), error => done(error));
   });
 
   it('should fail to add a wrong user', done => {
@@ -78,8 +105,14 @@ describe('API tests - users', () => {
       .post('/users')
       .send(user)
       .expect('Content-Type', /json/)
-      .expect(500);
-    done();
+      .expect(200)
+      .then((res) => {
+        console.log(res.body);
+        let response = JSON.parse(res.body);
+        expect(response).to.have.property("message")
+          .equal("Error adding user");
+      })
+      .then(() => done(), error => done(error));
   });
 
   it('should fail to update a wrong user', done => {
@@ -92,8 +125,13 @@ describe('API tests - users', () => {
       .put('/users/1234')
       .send(user)
       .expect('Content-Type', /json/)
-      .expect(500);
-    done();
+      .expect(200)
+      .then((res) => {
+        let response = JSON.parse(res.body);
+        expect(response).to.have.property("message")
+          .equal("User Not Found");
+      })
+      .then(() => done(), error => done(error));
   });
 
   it('should fail to delete a wrong user', done => {
@@ -102,17 +140,16 @@ describe('API tests - users', () => {
       .expect('Content-Type', /json/)
       .expect(200)
       .then(res =>{
-        expect(res.body).to.equal(
-          {message:'User not found'}
-        );
-      });
-    done();
+        let response = JSON.parse(res.body);
+        expect(response).to.have.property("message").equal("User Not Found")
+      })
+      .then(() => done(), error => done(error));
   });
 
-
-  /*after(done => {
+  afterEach(done => {
     mongoose.connection.close(() => {
       done();
-  });*/
+    });
+  });
 
 });

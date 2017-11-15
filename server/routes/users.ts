@@ -13,15 +13,14 @@ userRouter.post('/', (req, res, next) => {
   userPromise.then((response) =>{
     if(response) {
         var userID = response._id;
-        res.json({message: 'user added', userID : userID});
+        console.log(response);
+        res.json('{"message":"user added", "userID":"'+userID+'"}');
     } else {
-        res.json({message: 'Error adding user'});
+        res.json('{"message":"Error adding user"}');
     }
+  }).catch((response) => {
+    res.json('{"message":"Error adding user"}');
   });
-});
-
-userRouter.get('/', (req, res, next) => {
-  res.json({message: 'HELLO'});
 });
 
 /**
@@ -34,10 +33,12 @@ userRouter.get('/:id', (req, res, next) => {
   var userPromise = userController.getUser(userID);
   userPromise.then((response) =>{
     if(response) {
-      res.json(response);
+      res.json(JSON.stringify(response));
     } else {
-      res.json({message: 'User Not Found'});
+      res.json('{"message":"User Not Found"}');
     }
+  }).catch((response) => {
+    res.json('{"message":"User Not Found"}');
   });
 });
 
@@ -53,10 +54,10 @@ userRouter.put('/:id', (req, res, next) => {
     if(response) {
       res.json(response);
     } else {
-      res.json({message : 'User update error'});
+      res.json('{"message":"User update error"}');
     }
   }).catch((response) => {
-    res.json({message : 'User update error'})
+    res.json('{"message":"User update error"}');
   });
 });
 
@@ -71,10 +72,10 @@ userRouter.delete('/:id', (req, res, next) => {
     if(response) {
       res.json(response);
     } else {
-      res.json({message:'User deletion error'});
+      res.json('{"message":"User deletion error"}');
     }
   }).catch((response) =>{
-    res.json({message:'User deletion error'});
+    res.json('{"message":"User deletion error"}');
   });
 });
 

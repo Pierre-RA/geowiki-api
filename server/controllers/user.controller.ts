@@ -9,6 +9,7 @@ export class UserController {
   * Adds a user
   */
   public addUser(userPayload : any) {
+    console.log(userPayload);
     var user = new User(userPayload);
     return user.save();
   }
@@ -40,13 +41,6 @@ export class UserController {
   }
 
   /**
-  * Returns all users
-  */
-  public getUsers(): string {
-    return '{message: "Hello world"}}';
-  }
-
-  /**
   * Edits a given user with the user ID
   */
   public editUser(userID : string, userPayload: any): Promise<any> {
@@ -65,16 +59,16 @@ export class UserController {
                    changed = changed && (updatedDocument[attribute] !== newDocument[attribute]);
                 }
                 if(changed) {
-                  resolve("{'message': 'User changed'}");
+                  resolve('{"message":"User details changed"}');
                 } else {
-                  resolve("{'message': 'User details unchanged'}");
+                  resolve('{"message":"User details unchanged"}');
                 }
               }
             });
         };
         //User not found
         if(err) {
-          resolve("{'message': 'User not found'}");
+          resolve('{"message":"User Not Found"}');
         }
 
       });
@@ -90,9 +84,9 @@ export class UserController {
       User.remove({ _id: userID },
         ( err ) => {
           if (err) {
-            resolve("{'message':'User not found'}");
+            resolve('{"message":"User Not Found"}');
           } else {
-            resolve("{'message':'User '"+userID+"' deleted'}");
+            resolve('{"message":"User '+userID+' deleted"}');
           }
         });
     });
