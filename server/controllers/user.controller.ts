@@ -9,7 +9,6 @@ export class UserController {
   * Adds a user
   */
   public addUser(userPayload : any) {
-    console.log(userPayload);
     var user = new User(userPayload);
     return user.save();
   }

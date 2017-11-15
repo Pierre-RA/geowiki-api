@@ -10,13 +10,11 @@ describe('API tests - users', () => {
 
   beforeEach(done => {
     if (mongoose.connection.db) {
-      return mongoose.connection.db.dropDatabase(done);
+      return done();
     }
-    mongoose.connect(process.env.MONGODB_URI)
-      .then(() => {
-        mongoose.connection.db.dropDatabase(done);
-      });
-  });
+    mongoose.createConnection(process.env.MONGODB_URI);
+    done();
+  })
 
   it('should add/get/update/delete a user', done => {
     let user = {
@@ -107,7 +105,6 @@ describe('API tests - users', () => {
       .expect('Content-Type', /json/)
       .expect(200)
       .then((res) => {
-        console.log(res.body);
         let response = JSON.parse(res.body);
         expect(response).to.have.property("message")
           .equal("Error adding user");

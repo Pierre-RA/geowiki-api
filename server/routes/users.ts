@@ -13,7 +13,6 @@ userRouter.post('/', (req, res, next) => {
   userPromise.then((response) =>{
     if(response) {
         var userID = response._id;
-        console.log(response);
         res.json('{"message":"user added", "userID":"'+userID+'"}');
     } else {
         res.json('{"message":"Error adding user"}');
