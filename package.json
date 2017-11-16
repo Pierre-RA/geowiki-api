@@ -28,11 +28,12 @@
       "ts",
       "js"
     ],
+    "bail": true,
     "transform": {
       "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
     },
     "testMatch": [
-      "**/tests/**/*.test.(ts|js)"
+      "**/tests/**/*.ts"
     ],
     "testEnvironment": "node",
     "mapCoverage": true,
@@ -62,6 +63,7 @@
     "chai": "^4.1.2",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
+    "gulp-mocha": "^4.3.1",
     "gulp-typescript": "^3.2.2",
     "jest": "^21.0.1",
     "mocha": "^3.5.0",
